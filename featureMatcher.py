@@ -1,3 +1,6 @@
+# Building on the foundation of the feature visualizer POC, this program contains a flushed-out pipeline for using feature detection to match a tile given as an image to its numerical counterpart
+# This essentially mimics the behaviour of an image recognition pipeline, but using a threshold for the number of features detected as the classifier for what tile is shown in the image
+
 import cv2
 import numpy
 import os

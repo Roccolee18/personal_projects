@@ -1,3 +1,5 @@
+# Image pre-processing/cleanup pipeline testing to see if applying these techniques would yield clearer features
+# Testing results prove that image pre-processing has no benefit in adding to feature detection accuracy
 import cv2
 import numpy
 from matplotlib import pyplot as plt

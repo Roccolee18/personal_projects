@@ -1,3 +1,4 @@
+# Testing connection to MySQL database and interfacing with the console with Python
 import mysql.connector
 mydb = mysql.connector.connect(
     host = "localhost",

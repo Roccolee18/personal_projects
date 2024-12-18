@@ -1,3 +1,5 @@
+# The main program for this project
+
 # import client from inference_sdk
 from inference_sdk import InferenceHTTPClient
 # import os to get the API_KEY from the environment
@@ -9,6 +11,7 @@ tiles = []
 counts = []
 currTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
+# Establishing connection to the MySQL database
 mydb = mysql.connector.connect(
     host = 'localhost',
     user = 'root',
@@ -18,13 +21,13 @@ mydb = mysql.connector.connect(
 mycursor = mydb.cursor()
 
 
-# create a client object
+# Establishing API connection to Roboflow, which is the machine-learning based vision system trained to identify tiles from a hand
 client = InferenceHTTPClient(
     api_url="https://detect.roboflow.com",
     api_key="oyhttZJduhrKFlfI7p2t"
 )
 
-# run inference on the image
+# Passing the input image to the model and recieving results
 results = client.infer("./hands/hand1.png", model_id="majsoul-6igdu/1")
 # print (results)
 
@@ -32,6 +35,7 @@ results = client.infer("./hands/hand1.png", model_id="majsoul-6igdu/1")
 for pred in results['predictions']:
     tiles.append(pred['class'])
 
+# Matching the results to individual tiles
 for i in range(len(tiles)):
     match tiles[i]:
         case '10':
@@ -112,6 +116,7 @@ for i in range(len(tiles)):
 tiles.sort()
 # print(tiles)
 
+# Appending the count of tiles and the current time to a list
 for i in range(len(tiles)):
     currTileCount = 0
     currTile = tiles[i]
@@ -123,6 +128,10 @@ for i in range(len(tiles)):
 uniqueList = list(dict.fromkeys(counts))
 print(uniqueList)
 
+# Inserting the sorted list to the MySQL database
 sqlInsert = "INSERT INTO tile_counter (tile, count, posting_time) VALUES (%s, %s, %s);"
 mycursor.executemany(sqlInsert, uniqueList)
 mydb.commit()
+
+# From here, a PowerBI dashboard is connected to the database to act as a front end and perform analysis on the collected data in the form of various visualizations
+# Once new data is imported to the MySQL database, the dashboard simply has to be refreshed for new data to be analyzed and visualized
